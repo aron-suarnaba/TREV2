@@ -1,0 +1,22 @@
+import * as React from 'react';
+import { SidebarInset } from '@/components/ui/sidebar';
+import { jsx as _jsx } from 'react/jsx-runtime';
+
+export function AppContent({ variant = 'header', children, ...props }) {
+    if (variant === 'sidebar') {
+        return /*#__PURE__*/ _jsx(SidebarInset, {
+            ...props,
+            children: children,
+        });
+    }
+
+    return (
+        /*#__PURE__*/
+        _jsx('main', {
+            className:
+                'mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl',
+            ...props,
+            children: children,
+        })
+    );
+}

@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 
 export default function Landing() {
-    // ensure page title is set via Inertia config if needed
     useEffect(() => {
-        document.title = 'Landing - ' + (import.meta.env.VITE_APP_NAME || 'Laravel');
+        document.title = 'Landing - ' + (import.meta.env.VITE_APP_NAME || 'Printwell, Inc.');
     }, []);
 
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
             <nav className="w-full max-w-7xl mx-auto p-6 flex justify-between items-center">
-                <div className="text-2xl font-bold">MyApp</div>
+                <div className="text-2xl font-bold">Printwell, Inc.</div>
                 <div>
                     <a
                         href="/login"
@@ -26,7 +25,7 @@ export default function Landing() {
                 </div>
             </nav>
             <main className="flex-1 flex flex-col items-center justify-center text-center px-4">
-                <h1 className="text-5xl font-extrabold mb-4">Welcome to MyApp</h1>
+                <h1 className="text-5xl font-extrabold mb-4">Welcome to Printwell, Inc.</h1>
                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
                     A simple prototype landing page built with Tailwind and Inertia.
                 </p>
@@ -38,7 +37,7 @@ export default function Landing() {
                 </a>
             </main>
             <footer className="w-full text-center py-4 text-sm text-gray-500 dark:text-gray-400">
-                © {new Date().getFullYear()} MyApp. All rights reserved.
+                © {new Date().getFullYear()} Printwell, Inc. All rights reserved.
             </footer>
         </div>
     );

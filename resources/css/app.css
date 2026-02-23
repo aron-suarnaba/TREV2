@@ -11,6 +11,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 @theme {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
@@ -143,5 +145,9 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+    button:not(:disabled),
+    [role="button"]:not(:disabled){
+        cursor: pointer;
     }
 }

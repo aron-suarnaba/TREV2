@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
 export default function Landing() {
@@ -29,12 +30,13 @@ export default function Landing() {
                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
                     A simple prototype landing page built with Tailwind and Inertia.
                 </p>
-                <a
+                {/* <a
                     href="/register"
                     className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                     Get Started
-                </a>
+                </a> */}
+                <Button variant="link">Button</Button>
             </main>
             <footer className="w-full text-center py-4 text-sm text-gray-500 dark:text-gray-400">
                 © {new Date().getFullYear()} Printwell, Inc. All rights reserved.

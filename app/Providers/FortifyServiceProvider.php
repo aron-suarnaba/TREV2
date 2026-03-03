@@ -44,7 +44,7 @@ class FortifyServiceProvider extends ServiceProvider
 
     /**
      * Configure Fortify views.
-     */
+     */ 
     private function configureViews(): void
     {
         Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [

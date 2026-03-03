@@ -1,4 +1,4 @@
-import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
+import AuthLayoutTemplate from '@/layouts/auth/auth-split-layout';
 import { jsx as _jsx } from 'react/jsx-runtime';
 
 export default function AuthLayout({ children, title, description, ...props }) {

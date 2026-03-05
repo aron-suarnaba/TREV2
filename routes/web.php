@@ -24,6 +24,10 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Transactions');
     })->name('transactions');
 
+    Route::get('/items', function () {
+        return Inertia::render('Items');
+    })->name('items');
+
 });
 
 require __DIR__.'/auth.php';

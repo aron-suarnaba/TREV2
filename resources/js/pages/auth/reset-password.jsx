@@ -20,7 +20,8 @@ export default function ResetPassword({ token, email }) {
                 _jsx(Head, { title: 'Reset password' }) /*#__PURE__*/,
 
                 _jsx(Form, {
-                    ...update.form(),
+                    action: update().url,
+                    method: update().method,
                     transform: (data) => ({ ...data, token, email }),
                     resetOnSuccess: ['password', 'password_confirmation'],
                     children: ({ processing, errors } /*#__PURE__*/) =>

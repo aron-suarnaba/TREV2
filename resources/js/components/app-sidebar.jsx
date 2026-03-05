@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Receipt } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 
 import AppLogo from './app-logo';
-import { dashboard } from '@/routes';
+import { dashboard, transactions } from '@/routes';
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 
 const mainNavItems = [
@@ -22,6 +22,11 @@ const mainNavItems = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Transactions',
+        href: transactions(),
+        icon: Receipt,
     },
 ];
 

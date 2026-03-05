@@ -18,7 +18,7 @@ export function NavMain({ items = [] }) {
             className: 'px-2 py-0',
             children: [
                 /*#__PURE__*/
-                _jsx(SidebarGroupLabel, { children: 'Platform' }) /*#__PURE__*/,
+                _jsx(SidebarGroupLabel, { children: 'General' }) /*#__PURE__*/,
                 _jsx(SidebarMenu, {
                     children: items.map((item /*#__PURE__*/) =>
                         _jsx(

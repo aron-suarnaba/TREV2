@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('/', function () {
     return Inertia::render('Landing');
@@ -11,12 +10,21 @@ Route::get('/', function () {
 // keep the original welcome page available for reference/testing
 Route::get('/welcome', function () {
     return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
+        'canRegister' => Route::has('register'),
     ]);
 });
 
-Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
 
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/transactions', function () {
+        return Inertia::render('Transactions');
+    })->name('transactions');
+
+});
+
+require __DIR__.'/auth.php';
 require __DIR__.'/settings.php';

@@ -25,7 +25,8 @@ export default function Register() {
 
                 _jsx(Head, { title: 'Register' }) /*#__PURE__*/,
                 _jsx(Form, {
-                    ...store.form(),
+                    action: store().url,
+                    method: store().method,
                     resetOnSuccess: ['password', 'password_confirmation'],
                     disableWhileProcessing: true,
                     className: 'flex flex-col gap-6',

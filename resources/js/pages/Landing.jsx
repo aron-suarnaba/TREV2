@@ -7,7 +7,7 @@ export default function Landing() {
 
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            {/* SEO & Title Handling with Inertia Head */}
+
             <Head title={`Landing - ${appName}`} />
 
             <nav className="w-full max-w-7xl mx-auto p-6 flex justify-between items-center">
@@ -22,7 +22,7 @@ export default function Landing() {
 
                     {/* Using a Button component as a Link for the Register action */}
                     <Button asChild variant="outline">
-                        <Link href={route('register')}>
+                        <Link href='#'>
                             Register
                         </Link>
                     </Button>
@@ -39,7 +39,7 @@ export default function Landing() {
 
                 <div className="flex gap-4">
                     <Button size="lg" asChild>
-                        <Link href={route('register')}>
+                        <Link href='#'>
                             Get Started
                         </Link>
                     </Button>

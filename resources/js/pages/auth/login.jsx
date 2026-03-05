@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import {
@@ -28,7 +27,8 @@ export default function Login({ status, canResetPassword, canRegister }) {
                 _jsx(Head, { title: 'Log in' }) /*#__PURE__*/,
 
                 _jsx(Form, {
-                    ...store.form(),
+                    action: store().url,
+                    method: store().method,
                     resetOnSuccess: ['password'],
                     className: 'flex flex-col gap-6',
                     children: ({ processing, errors } /*#__PURE__*/) =>
@@ -148,7 +148,7 @@ export default function Login({ status, canResetPassword, canRegister }) {
                                             "Don't have an account?",
                                             ' ' /*#__PURE__*/,
                                             _jsx(TextLink, {
-                                                href: register(),
+                                                href: "#",
                                                 tabIndex: 5,
                                                 children: 'Sign up',
                                             }),

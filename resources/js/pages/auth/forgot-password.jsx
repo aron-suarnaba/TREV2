@@ -38,7 +38,8 @@ export default function ForgotPassword({ status }) {
                     children: [
                         /*#__PURE__*/
                         _jsx(Form, {
-                            ...email.form(),
+                            action: email().url,
+                            method: email().method,
                             children: ({ processing, errors } /*#__PURE__*/) =>
                                 _jsxs(_Fragment, {
                                     children: [

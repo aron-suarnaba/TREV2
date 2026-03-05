@@ -33,7 +33,8 @@ export default function VerifyEmail({ status }) {
                     }) /*#__PURE__*/,
 
                 _jsx(Form, {
-                    ...send.form(),
+                    action: send().url,
+                    method: send().method,
                     className: 'space-y-6 text-center',
                     children: ({ processing } /*#__PURE__*/) =>
                         _jsxs(_Fragment, {
@@ -51,6 +52,8 @@ export default function VerifyEmail({ status }) {
 
                                 _jsx(TextLink, {
                                     href: logout(),
+                                    method: 'post',
+                                    as: 'button',
                                     className: 'mx-auto block text-sm',
                                     children: 'Log out',
                                 }),

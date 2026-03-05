@@ -21,7 +21,8 @@ export default function ConfirmPassword() {
                 _jsx(Head, { title: 'Confirm password' }) /*#__PURE__*/,
 
                 _jsx(Form, {
-                    ...store.form(),
+                    action: store().url,
+                    method: store().method,
                     resetOnSuccess: ['password'],
                     children: ({ processing, errors } /*#__PURE__*/) =>
                         _jsxs('div', {

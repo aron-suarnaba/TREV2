@@ -67,12 +67,13 @@ export function UserMenuContent({ user }) {
                 _jsx(DropdownMenuItem, {
                     asChild: true,
                     /*#__PURE__*/
-                    children: _jsxs(Link, {
-                        className: 'block w-full cursor-pointer',
-                        href: logout(),
-                        as: 'button',
-                        onClick: handleLogout,
-                        'data-test': 'logout-button',
+                        children: _jsxs(Link, {
+                            className: 'block w-full cursor-pointer',
+                            href: logout(),
+                            as: 'button',
+                            method: 'post',
+                            onClick: handleLogout,
+                            'data-test': 'logout-button',
                         children: [
                             /*#__PURE__*/
 

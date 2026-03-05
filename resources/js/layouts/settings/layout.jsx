@@ -8,7 +8,6 @@ import { cn, toUrl } from '@/lib/utils';
 
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
 import { edit as editPassword } from '@/routes/user-password';
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 
@@ -21,11 +20,6 @@ const sidebarNavItems = [
     {
         title: 'Password',
         href: editPassword(),
-        icon: null,
-    },
-    {
-        title: 'Two-Factor Auth',
-        href: show(),
         icon: null,
     },
     {

@@ -26,7 +26,7 @@ export default function AppLogo() {
                     children: _jsx('span', {
                         className:
                             'mb-0.5 truncate leading-tight font-semibold',
-                        children: 'Laravel Starter Kit',
+                        children: import.meta.env.VITE_APP_NAME,
                     }),
                 }),
             ],

@@ -113,6 +113,8 @@ export default function Transactions() {
             <div className="p-4 sm:p-6 lg:p-8">
 
                 <div className="flex justify-between items-center mb-5 gap-8">
+
+                    {/* This is the modal for generation of TRE Transactions */}
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button>Generate TRE</Button>
@@ -162,7 +164,7 @@ export default function Transactions() {
 
                                         <div className="grid gap-2">
                                             <Label htmlFor="quarter">Quarter</Label>
-                                            <Input id="quarter" placeholder="1" required />
+                                            <Input type="number" max="5" min="0" id="quarter" placeholder="1" required />
                                         </div>
                                     </div>
                                 </div>
@@ -177,6 +179,7 @@ export default function Transactions() {
                         </DialogContent>
                     </Dialog>
 
+                    {/* This is the search input */}
                     <div className="flex items-center gap-2">
                         <div className="relative max-w-xs">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -204,9 +207,9 @@ export default function Transactions() {
                     </div>
                 </div>
 
-                <div className="rounded-md border">
+                <div>
                     <Table>
-                        <TableCaption>A list of your recent transactions.</TableCaption>
+                        <TableCaption>A list of recent TRE transactions.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Site</TableHead>

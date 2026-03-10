@@ -77,7 +77,7 @@ export default function Items() {
                                 <div className="grid gap-6">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="TINNum">VAT/TIN No.</Label>
+                                            <Label htmlFor="TINNum">VAT/TIN No.<span className="text-red-500 text-lg">*</span></Label>
                                             <Select>
                                                 <SelectTrigger id="TINNum">
                                                     <SelectValue placeholder="Select TIN No." />
@@ -89,7 +89,7 @@ export default function Items() {
                                             </Select>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="date">Date</Label>
+                                            <Label htmlFor="date">Date<span className="text-red-500 text-lg">*</span></Label>
                                             <Input type="date" id="date" defaultValue={today} />
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@ export default function Items() {
                                     {/* Row 2: Type and Invoice */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="type">Type</Label>
+                                            <Label htmlFor="type">Type<span className="text-red-500 text-lg">*</span></Label>
                                             <Select>
                                                 <SelectTrigger id="type" className="w-full">
                                                     <SelectValue placeholder="Select Type" />
@@ -111,7 +111,7 @@ export default function Items() {
                                             </Select>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="invoiceNo">Invoice/OR No.</Label>
+                                            <Label htmlFor="invoiceNo">Invoice/OR No.<span className="text-red-500 text-lg">*</span></Label>
                                             <Input type="text" id="invoiceNo" placeholder="e.g. 0000503891" />
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@ export default function Items() {
                                             <Label htmlFor="withVAT" className="cursor-pointer">Transaction includes VAT</Label>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="receiptTotal">Receipt Total</Label>
+                                            <Label htmlFor="receiptTotal">Receipt Total<span className="text-red-500 text-lg">*</span></Label>
                                             <Input type="number" id="receiptTotal" placeholder="0.00" className="font-mono" />
                                         </div>
                                     </div>
@@ -143,44 +143,44 @@ export default function Items() {
                                     {/* Row 5: Discounts */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="SCPWDDiscount" className="text-xs uppercase text-muted-foreground">SC/PWD Discount</Label>
+                                            <Label htmlFor="SCPWDDiscount" className="text-xs uppercase text-muted-foreground">SC/PWD Discount<span className="text-red-500 text-lg">*</span></Label>
                                             <Input type="number" id="SCPWDDiscount" placeholder="0.00" />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="SCPWDBasis" className="text-xs uppercase text-muted-foreground">SC/PWD Basis</Label>
+                                            <Label htmlFor="SCPWDBasis" className="text-xs uppercase text-muted-foreground">SC/PWD Basis<span className="text-red-500 text-lg">*</span></Label>
                                             <Input type="number" id="SCPWDBasis" placeholder="0.00" />
                                         </div>
                                     </div>
 
                                     {/* Row 6: Tax Breakdown */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t pt-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="vatSales">Vatable Sales</Label>
-                                            <Input type="number" id="vatSales" placeholder="0.00" />
+                                            <Input type="number" id="vatSales" placeholder="0.00" disabled />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="nonVATSales">Non-VAT Sales</Label>
-                                            <Input type="number" id="nonVATSales" placeholder="0.00" />
+                                            <Input type="number" id="nonVATSales" placeholder="0.00" disabled />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="VAT">VAT Amount</Label>
-                                            <Input type="number" id="VAT" placeholder="0.00" />
+                                            <Input type="number" id="VAT" placeholder="0.00" disabled />
                                         </div>
                                     </div>
 
                                     {/* Row 7: Account Codes */}
-                                    <div className="grid grid-cols-3 gap-4 border-t pt-4">
+                                    <div className="grid grid-cols-3 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="acct">Account</Label>
-                                            <Input type="text" id="acct" placeholder="Code" />
+                                            <Input type="text" id="acct" placeholder="Code" disabled />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="uc3">UC3</Label>
-                                            <Input type="text" id="uc3" placeholder="UC3" />
+                                            <Input type="text" id="uc3" placeholder="UC3" disabled />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="uc4">UC4</Label>
-                                            <Input type="text" id="uc4" placeholder="UC4" />
+                                            <Input type="text" id="uc4" placeholder="UC4" disabled />
                                         </div>
                                     </div>
                                 </div>

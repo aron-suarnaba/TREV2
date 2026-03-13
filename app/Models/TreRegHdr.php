@@ -12,6 +12,8 @@ class TreRegHdr extends Model
 
     // Table name is now tre_reg_headers (Laravel finds this automatically)
 
+    protected $table = 'tre_reg_headers';
+
     protected $fillable = [
         'site',
         'tre_num',

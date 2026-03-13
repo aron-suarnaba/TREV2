@@ -1,7 +1,7 @@
 "use client"
 import AppLayout from '@/layouts/app-layout';
 import { router, Head } from '@inertiajs/react';
-import { dashboard } from '@/routes';
+import { dashboard, items } from '@/routes';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, ListFilterPlus, BadgeCheck, Search, Clock } from "lucide-react"
 import * as React from "react"
@@ -11,6 +11,7 @@ import {
     TableBody,
     TableCaption,
     TableCell,
+    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -45,60 +46,72 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const breadcrumbs = [
     { title: 'Transactions', href: dashboard().url },
 ];
 
-const transactions = [
-    {
-        site: "Printwell, Inc.",
-        treNumber: "TRE-PI-2026-05-03",
-        userid: "user.admin@printwell.com.ph",
-        date: "2026, March 5",
-        status: "In Process",
-        forApproval: true,
-        createDate: "2026-05-03",
-    },
-    {
-        site: "Printwell, Inc.",
-        treNumber: "TRE-EPS-2026-03-01",
-        userid: "j.delacruz@ecopack.com",
-        date: "2026, March 1",
-        status: "Approved",
-        forApproval: false,
-        createDate: "2026-03-01",
-    },
-    {
-        site: "Fortune Packaging, Inc.",
-        treNumber: "TRE-GLL-2026-02-28",
-        userid: "m.santos@globallog.ph",
-        date: "2026, February 28",
-        status: "In Process",
-        forApproval: true,
-        createDate: "2026-02-28",
-    },
-    {
-        site: "Printwell, Inc.",
-        treNumber: "TRE-TSS-2026-02-15",
-        userid: "admin.tech@stream.com",
-        date: "2026, February 15",
-        status: "In Process",
-        forApproval: true,
-        createDate: "2026-02-15",
-    },
-    {
-        site: "Printwell Packaging Corp.",
-        treNumber: "TRE-PI-2026-02-10",
-        userid: "onyok.velasco@gmail.com",
-        date: "2026, February 10",
-        status: "Exported",
-        forApproval: false,
-        createDate: "2026-02-10",
-    },
-]
+// const transactions = [
+//     {
+//         site: "Printwell, Inc.",
+//         treNumber: "TRE-PI-2026-05-03",
+//         userid: "user.admin@printwell.com.ph",
+//         date: "2026, March 5",
+//         status: "In Process",
+//         forApproval: true,
+//         createDate: "2026-05-03",
+//     },
+//     {
+//         site: "Printwell, Inc.",
+//         treNumber: "TRE-EPS-2026-03-01",
+//         userid: "j.delacruz@ecopack.com",
+//         date: "2026, March 1",
+//         status: "Approved",
+//         forApproval: false,
+//         createDate: "2026-03-01",
+//     },
+//     {
+//         site: "Fortune Packaging, Inc.",
+//         treNumber: "TRE-GLL-2026-02-28",
+//         userid: "m.santos@globallog.ph",
+//         date: "2026, February 28",
+//         status: "In Process",
+//         forApproval: true,
+//         createDate: "2026-02-28",
+//     },
+//     {
+//         site: "Printwell, Inc.",
+//         treNumber: "TRE-TSS-2026-02-15",
+//         userid: "admin.tech@stream.com",
+//         date: "2026, February 15",
+//         status: "In Process",
+//         forApproval: true,
+//         createDate: "2026-02-15",
+//     },
+//     {
+//         site: "Printwell Packaging Corp.",
+//         treNumber: "TRE-PI-2026-02-10",
+//         userid: "onyok.velasco@gmail.com",
+//         date: "2026, February 10",
+//         status: "Exported",
+//         forApproval: false,
+//         createDate: "2026-02-10",
+//     },
+// ]
 
-export default function Transactions() {
+
+export default function Transactions({ transactions }) {
+    const { data = [], links = [], current_page = 1, last_page = 1 } = transactions ?? {};
+
     const [position, setPosition] = React.useState("date");
 
     const statusStyles = {
@@ -207,11 +220,12 @@ export default function Transactions() {
                     </div>
                 </div>
 
-                <div>
+                <div className="rounded-md">
                     <Table>
                         <TableCaption>A list of recent TRE transactions.</TableCaption>
                         <TableHeader>
                             <TableRow>
+                                <TableHead>ID</TableHead>
                                 <TableHead>Site</TableHead>
                                 <TableHead>TRE Number</TableHead>
                                 <TableHead>User ID</TableHead>
@@ -223,12 +237,13 @@ export default function Transactions() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {transactions.map((transaction, index) => (
+                            {data.map((transaction, index) => (
                                 <TableRow
                                     key={index}
                                     className="cursor-pointer hover:bg-muted/50"
-                                    onClick={() => router.visit(route('items'))}
+                                    onClick={() => router.visit(items().url)}
                                 >
+                                    <TableCell>{index + 1}</TableCell>
                                     <TableCell className="font-medium">{transaction.site}</TableCell>
                                     <TableCell>{transaction.treNumber}</TableCell>
                                     <TableCell className="text-muted-foreground">{transaction.userid}</TableCell>
@@ -261,7 +276,7 @@ export default function Transactions() {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => router.visit(route('items'))}>
+                                                <DropdownMenuItem onClick={() => router.visit(items().url)}>
                                                     View Details
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem>For Approval</DropdownMenuItem>
@@ -276,6 +291,41 @@ export default function Transactions() {
                             ))}
                         </TableBody>
                     </Table>
+                </div>
+                <div className="py-6">
+                    <Pagination>
+                        <PaginationContent>
+                            {/* Previous Button */}
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    href={links[0]?.url || "#"}
+                                    className={!links[0]?.url ? "pointer-events-none opacity-50" : ""}
+                                />
+                            </PaginationItem>
+
+                            {/* Page Numbers */}
+                            {links.slice(1, -1).map((link, i) => (
+                                <PaginationItem key={i}>
+                                    <PaginationLink
+                                        href={link.url}
+                                        isActive={link.active}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
+                                </PaginationItem>
+                            ))}
+
+                            {/* Next Button */}
+                            <PaginationItem>
+                                <PaginationNext
+                                    href={links[links.length - 1]?.url || "#"}
+                                    className={!links[links.length - 1]?.url ? "pointer-events-none opacity-50" : ""}
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                    <div className="text-center text-xs text-muted-foreground mt-3">
+                        Showing page {current_page} of {last_page}
+                    </div>
                 </div>
             </div>
         </AppLayout>

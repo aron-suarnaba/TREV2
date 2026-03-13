@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TRERegHdrController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,9 +21,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/transactions', function () {
-        return Inertia::render('Transactions');
-    })->name('transactions');
+    Route::get('/transactions', [TRERegHdrController::class, 'index'])->name('transactions');
 
     Route::get('/items', function () {
         return Inertia::render('Items');

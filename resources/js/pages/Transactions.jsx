@@ -2,10 +2,18 @@
 import AppLayout from '@/layouts/app-layout';
 import { router, Head } from '@inertiajs/react';
 import { dashboard, items } from '@/routes';
+import transactionsRoutes from '@/routes/transactions';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, ListFilterPlus, BadgeCheck, Search, Clock } from "lucide-react"
+import {
+    MoreHorizontal, ListFilterPlus, BadgeCheck, Search, Clock, Eye,
+    Zap,
+    Pencil,
+    CheckCircle,
+    Trash2
+} from "lucide-react"
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Table,
     TableBody,
@@ -113,11 +121,101 @@ export default function Transactions({ transactions }) {
     const { data = [], links = [], current_page = 1, last_page = 1 } = transactions ?? {};
 
     const [position, setPosition] = React.useState("date");
+    const [activeTransaction, setActiveTransaction] = React.useState(null);
+    const [editOpen, setEditOpen] = React.useState(false);
+    const [editForm, setEditForm] = React.useState({
+        site: '',
+        treNumber: '',
+        userid: '',
+        year: '',
+        month: '',
+        period: '',
+        quarter: '',
+        statusCode: 'I',
+        isForApproval: false,
+    });
 
     const statusStyles = {
         "In Process": "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
         "Approved": "bg-green-100 text-green-800 hover:bg-green-100/80",
         "Exported": "bg-red-100 text-red-800 hover:bg-red-100/80",
+    };
+
+    const months = [
+        'JANUARY',
+        'FEBRUARY',
+        'MARCH',
+        'APRIL',
+        'MAY',
+        'JUNE',
+        'JULY',
+        'AUGUST',
+        'SEPTEMBER',
+        'OCTOBER',
+        'NOVEMBER',
+        'DECEMBER',
+    ];
+
+    const statusLabels = {
+        I: 'In Process',
+        A: 'Approved',
+        E: 'Exported',
+    };
+
+    const handleDelete = (transactionId, treNumber) => {
+        if (!window.confirm(`Delete transaction ${treNumber}?`)) {
+            return;
+        }
+
+        router.delete(transactionsRoutes.destroy(transactionId).url, {
+            preserveScroll: true,
+        });
+    };
+
+    const openEditDialog = (transaction) => {
+        setEditForm({
+            site: transaction.site ?? '',
+            treNumber: transaction.treNumber ?? '',
+            userid: transaction.userid ?? '',
+            year: transaction.year ?? '',
+            month: transaction.month ?? '',
+            period: transaction.period ?? '',
+            quarter: transaction.quarter ?? '',
+            statusCode: transaction.statusCode ?? 'I',
+            isForApproval: Boolean(transaction.isForApproval),
+        });
+        setActiveTransaction(transaction);
+        setEditOpen(true);
+    };
+
+    const isEditLocked = activeTransaction && ['A', 'E'].includes(activeTransaction.statusCode);
+    const lockedLabel = activeTransaction ? statusLabels[activeTransaction.statusCode] ?? activeTransaction.status : null;
+
+    const handleEditSubmit = (event) => {
+        event.preventDefault();
+
+        if (!activeTransaction || isEditLocked) {
+            return;
+        }
+
+        router.put(
+            transactionsRoutes.update(activeTransaction.id).url,
+            {
+                site: editForm.site,
+                tre_num: editForm.treNumber,
+                user_id: editForm.userid,
+                year: Number(editForm.year),
+                month: editForm.month,
+                period: Number(editForm.period),
+                quarter: Number(editForm.quarter),
+                status: editForm.statusCode,
+                is_for_approval: Boolean(editForm.isForApproval),
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => setEditOpen(false),
+            },
+        );
     };
 
     return (
@@ -144,7 +242,7 @@ export default function Transactions({ transactions }) {
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
                                         <Label htmlFor="user-id">User ID</Label>
-                                        <Input id="user-id" value="aron.suarnaba@gmail.com" disabled />
+                                        <Input id="user-id" value="user.admin@example.com" disabled />
                                     </div>
 
                                     <div className="grid grid-cols-3 gap-2">
@@ -239,7 +337,7 @@ export default function Transactions({ transactions }) {
                         <TableBody>
                             {data.map((transaction, index) => (
                                 <TableRow
-                                    key={index}
+                                    key={transaction.id}
                                     className="cursor-pointer hover:bg-muted/50"
                                     onClick={() => router.visit(items().url)}
                                 >
@@ -269,21 +367,239 @@ export default function Transactions({ transactions }) {
                                     <TableCell className="text-right text-muted-foreground">{transaction.createDate}</TableCell>
                                     <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
+                                            <DropdownMenuTrigger asChild className="outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent">
                                                 <Button variant="ghost" size="icon" className="size-8">
                                                     <MoreHorizontal className="size-4" />
                                                     <span className="sr-only">Open menu</span>
                                                 </Button>
                                             </DropdownMenuTrigger>
+
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => router.visit(items().url)}>
+                                                {/* View Details Icon added */}
+                                                <DropdownMenuItem onClick={() => router.visit(transactionsRoutes.edit(transaction.id).url)}>
+                                                    <Eye className="mr-2 size-4" />
                                                     View Details
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem>For Approval</DropdownMenuItem>
+
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <DropdownMenuItem
+                                                            onSelect={(event) => event.preventDefault()}
+                                                            onClick={() => setActiveTransaction(transaction)}
+                                                        >
+                                                            {/* Quick View Icon added */}
+                                                            <Zap className="mr-2 size-4" />
+                                                            Quick View
+                                                        </DropdownMenuItem>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="sm:max-w-md">
+                                                        <DialogHeader>
+                                                            <DialogTitle>Transaction Summary</DialogTitle>
+                                                            <DialogDescription>
+                                                                Quick view of this TRE transaction.
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        <div className="grid gap-2 text-sm">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-muted-foreground">TRE Number</span>
+                                                                <span className="font-medium">{activeTransaction?.treNumber}</span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-muted-foreground">Site</span>
+                                                                <span className="font-medium">{activeTransaction?.site}</span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-muted-foreground">User ID</span>
+                                                                <span className="font-medium">{activeTransaction?.userid}</span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-muted-foreground">Status</span>
+                                                                <span className="font-medium">{activeTransaction?.status}</span>
+                                                            </div>
+                                                        </div>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button variant="outline">Close</Button>
+                                                            </DialogClose>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
+
+                                                <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                                                    <DialogTrigger asChild>
+                                                        <DropdownMenuItem
+                                                            onSelect={(event) => event.preventDefault()}
+                                                            onClick={() => openEditDialog(transaction)}
+                                                        >
+                                                            <Pencil className="mr-2 size-4" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="sm:max-w-2xl">
+                                                        <DialogHeader>
+                                                            <DialogTitle>Edit Transaction</DialogTitle>
+                                                            <DialogDescription>
+                                                                Update transaction details when status is In Process.
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        {isEditLocked && (
+                                                            <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                                                                This transaction is already {lockedLabel} and can no longer be edited.
+                                                            </div>
+                                                        )}
+                                                        <form onSubmit={handleEditSubmit} className="space-y-6">
+                                                            <div className="grid gap-4">
+                                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-site">Site</Label>
+                                                                        <Input
+                                                                            id="edit-site"
+                                                                            value={editForm.site}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, site: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-tre-number">TRE Number</Label>
+                                                                        <Input
+                                                                            id="edit-tre-number"
+                                                                            value={editForm.treNumber}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, treNumber: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-user-id">User ID</Label>
+                                                                        <Input
+                                                                            id="edit-user-id"
+                                                                            value={editForm.userid}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, userid: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-year">Year</Label>
+                                                                        <Input
+                                                                            id="edit-year"
+                                                                            type="number"
+                                                                            min="1900"
+                                                                            max="2100"
+                                                                            value={editForm.year}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, year: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-month">Month</Label>
+                                                                        <Select
+                                                                            value={editForm.month}
+                                                                            onValueChange={(value) => setEditForm((prev) => ({ ...prev, month: value }))}
+                                                                            disabled={isEditLocked}
+                                                                        >
+                                                                            <SelectTrigger id="edit-month">
+                                                                                <SelectValue placeholder="Select month" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent>
+                                                                                {months.map((month) => (
+                                                                                    <SelectItem key={month} value={month}>
+                                                                                        {month}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-period">Period</Label>
+                                                                        <Input
+                                                                            id="edit-period"
+                                                                            type="number"
+                                                                            min="1"
+                                                                            max="12"
+                                                                            value={editForm.period}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, period: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-quarter">Quarter</Label>
+                                                                        <Input
+                                                                            id="edit-quarter"
+                                                                            type="number"
+                                                                            min="1"
+                                                                            max="4"
+                                                                            value={editForm.quarter}
+                                                                            onChange={(event) => setEditForm((prev) => ({ ...prev, quarter: event.target.value }))}
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                                                    <div className="grid gap-2">
+                                                                        <Label htmlFor="edit-status">Status</Label>
+                                                                        <Select
+                                                                            value={editForm.statusCode}
+                                                                            onValueChange={(value) => setEditForm((prev) => ({ ...prev, statusCode: value }))}
+                                                                            disabled={isEditLocked}
+                                                                        >
+                                                                            <SelectTrigger id="edit-status">
+                                                                                <SelectValue placeholder="Select status" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent>
+                                                                                {Object.entries(statusLabels).map(([value, label]) => (
+                                                                                    <SelectItem key={value} value={value}>
+                                                                                        {label}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-3 rounded-md border p-3">
+                                                                        <Checkbox
+                                                                            id="edit-for-approval"
+                                                                            checked={editForm.isForApproval}
+                                                                            onCheckedChange={(value) =>
+                                                                                setEditForm((prev) => ({ ...prev, isForApproval: Boolean(value) }))
+                                                                            }
+                                                                            disabled={isEditLocked}
+                                                                        />
+                                                                        <Label htmlFor="edit-for-approval">For Approval</Label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <DialogFooter className="gap-2">
+                                                                <DialogClose asChild>
+                                                                    <Button type="button" variant="outline">
+                                                                        Cancel
+                                                                    </Button>
+                                                                </DialogClose>
+                                                                <Button type="submit" disabled={isEditLocked}>
+                                                                    Save Changes
+                                                                </Button>
+                                                            </DialogFooter>
+                                                        </form>
+                                                    </DialogContent>
+                                                </Dialog>
+
+                                                {/* For Approval Icon added */}
+                                                <DropdownMenuItem>
+                                                    <CheckCircle className="mr-2 size-4" />
+                                                    For Approval
+                                                </DropdownMenuItem>
+
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem variant="destructive">
+
+                                                <DropdownMenuItem
+                                                    variant="destructive"
+                                                    onClick={() => handleDelete(transaction.id, transaction.treNumber)}
+                                                >
+                                                    <Trash2 className="mr-2 size-4" />
                                                     Delete
                                                 </DropdownMenuItem>
+
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>

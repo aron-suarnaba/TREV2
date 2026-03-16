@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TRERegHdrController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,10 +23,16 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::get('/transactions', [TRERegHdrController::class, 'index'])->name('transactions');
+    Route::get('/transactions/create', [TRERegHdrController::class, 'create'])->name('transactions.create');
+    Route::post('/transactions', [TRERegHdrController::class, 'store'])->name('transactions.store');
+    Route::get('/transactions/{transaction}/edit', [TRERegHdrController::class, 'edit'])->name('transactions.edit');
+    Route::put('/transactions/{transaction}', [TRERegHdrController::class, 'update'])->name('transactions.update');
+    Route::delete('/transactions/{transaction}', [TRERegHdrController::class, 'destroy'])->name('transactions.destroy');
 
-    Route::get('/items', function () {
-        return Inertia::render('Items');
-    })->name('items');
+    Route::get('/items', [ItemController::class, 'index'])->name('items');
+    Route::post('/items', [ItemController::class, 'store'])->name('items.store');
+    Route::put('/items/{item}', [ItemController::class, 'update'])->name('items.update');
+    Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('items.destroy');
 
 });
 
